@@ -1,4 +1,5 @@
 # Random-dish
 帮助你解决不知道吃什么的问题
 示例：
-<img width="906" height="531" alt="image" src="https://github.com/user-attachments/assets/eaea1c7e-4f02-4e89-ac8d-9fe980e31011" />
+<img width="763" height="423" alt="image" src="https://github.com/user-attachments/assets/ecc3d671-fefe-49d2-b5e4-ca09b557e649" />
+
