@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点名</title>
+    <style>
+        /* 初始化页面，清除所有元素的内外边距 */
+        *{
+            padding: 0;
+            margin: 0;
+            /* 设置背景颜色为414141 */
+            background-color: #414141;
+        }
+        /* 盒子居中 */
+        .wrapper{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            text-align: center;            
+        }
+        /* 使用上期视频的文字渐变效果，再加一点点文字阴影 */
+        span,h2{
+        	text-shadow: 0 0 10px #dfd8d8;
+            background: linear-gradient(135deg,#14ffe9,#ffeb3b,#ff00e0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: ff 0.9s linear infinite;
+        }
+        @keyframes ff{
+            to{filter: hue-rotate(360deg);}
+        }
+        /* 设置一下字体大小 */
+        h2{
+            font-size: 72px;
+        }
+        span{
+            font-size: 46px;
+        }
+
+
+        button{
+            min-width: 120px;
+            height: 32px;
+            box-shadow: 0 0 10px #fff;
+            /* 取消轮廓线 */
+            outline: none;
+            background-color: gray;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 8px;
+        }
+        .controls{
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h2>随机点菜</h2>
+        <span id="name"></span>
+        <div class="controls">
+            <button id="button_text">start</button>
+            <button id="mode_button">模式：允许重复</button>
+        </div>
+    </div>
+
+    <script>
+        // 获取标签
+        let nametxt=document.getElementById('name');
+        let toggleButton=document.getElementById('button_text');
+        let modeButton=document.getElementById('mode_button');
+        // 创建一个数组存储菜品
+        let dishes=[
+            '宫保鸡丁','鱼香肉丝','西红柿炒鸡蛋','麻婆豆腐','红烧肉','清蒸鲈鱼',
+            '葱爆羊肉','酸辣土豆丝','青椒土豆丝','蚝油生菜','蒜蓉西兰花','香辣虾',
+            '干锅菜花','香菇滑鸡','番茄牛腩','水煮牛肉','口水鸡','回锅肉',
+            '酱爆茄子','孜然羊肉','葱油拌面','蛋炒饭','皮蛋瘦肉粥','牛肉馅饺子',
+            '小笼包','生煎包','鸡公煲','黄焖鸡米饭','砂锅粥','凉皮','肉夹馍',
+            '铁板鱿鱼','烤冷面','煎饼果子','炒河粉','兰州牛肉面','灌汤包','卤肉饭','酸菜鱼'
+        ];
+        let allowRepeat=true;
+        let uniquePool=[...dishes];
+        let timer=null;
+        let running=false;
+
+        function getRandomDish(){
+            const index=Math.floor(Math.random()*dishes.length);
+            return dishes[index];
+        }
+        function getUniqueDish(){
+            if(uniquePool.length===0){
+                uniquePool=[...dishes];
+            }
+            const index=Math.floor(Math.random()*uniquePool.length);
+            return uniquePool.splice(index,1)[0];
+        }
+        function clock(){
+            const randomDish=allowRepeat?getRandomDish():getUniqueDish();
+            nametxt.innerHTML=randomDish;
+        }
+        function startRandom(){
+            if(running) return;
+            timer=self.setInterval(clock,30);
+            toggleButton.innerHTML='stop';
+            running=true;
+        }
+        function stopRandom(){
+            if(!running) return;
+            window.clearInterval(timer);
+            toggleButton.innerHTML='start';
+            running=false;
+        }
+        toggleButton.onclick=function(){
+            if(running){
+                stopRandom();
+            }else{
+                startRandom();
+            }
+        };
+        modeButton.onclick=function(){
+            allowRepeat=!allowRepeat;
+            modeButton.innerHTML=allowRepeat?'模式：允许重复':'模式：不重复';
+            uniquePool=[...dishes];
+        };
+        // 初始状态暂停
+        stopRandom();
+    </script>
+</body>
+</html>
